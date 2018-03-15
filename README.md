@@ -94,7 +94,7 @@ text: {
 
 * using `is` property and a template literal
 
-```js
+```html
 Vue.component('individual-comment', {
     template: `<li> {{ commentpost }} </li>`,
     props: ['commentpost']
@@ -124,7 +124,7 @@ Vue.component('individual-comment', {
 
 * Single file components with import/export
 
-```js
+```html
 <template>
     <div>
         <Child />
@@ -157,7 +157,7 @@ TODO: add example
 * Similar to `{props.children}` in React
 * You can have defaults
 
-```js
+```html
 // Inside the parent
 
 <h1 slot="headerinfo">Populates the headerinfo slot</h1>
@@ -204,7 +204,7 @@ TODO: add example
 
 * Wrap child component in a transition component
 
-```js
+```html
 <transition name="fade">
     <app-child v-if="isShowing" class="modal">
         <button @click="toggleShow">
@@ -230,7 +230,7 @@ TODO: add example
 
 * For animations, assign classes to `enter-active-class` and `leave-active-class` props on the transition component
 
-```js
+```html
 <template>
 <transition
     name="ballmove"
@@ -262,7 +262,7 @@ TODO: add example
 
 * Specify an order for operations by setting the `mode` prop on the transition component to `in-out` or `out-in`, usually `out-in`
 
-```js
+```html
 <template>
 <transition name="flip" mode="out-in">
     <slot v-if="!isShowing"></slot>
@@ -293,7 +293,7 @@ TODO: add example
 * Set `:css` to false
 * Create methods for the custom names
 
-```js
+```html
 <template>
 <transition
     @before-enter="beforeEnter"
@@ -584,7 +584,12 @@ export default {
 ### Reactivity
 
 * Keeping the relationship in sync
-* All properties get converted to getters and setters using the `Object.defineProperty` api
+* Given `a` and `b=a*10`What if we had a magic internal function that `onAChanged()` that updates `b` anytime `a` changes?
+* If we encapsulate a query selector and DOM manipulation in `onAChanged`, it becomes declarative
+* We can further abstract this into a templating language, in which `onStateChanged(() => { view = render(state)})`
+* How do we implement `onStateChanged`?
+* React uses a `setState` method; it requires the user to always call a function to manipulate the state; this is what triggers the state change
+* In vue, all properties get converted to getters and setters using the `Object.defineProperty` api
 
 #### Getters and Setters
 
@@ -605,7 +610,27 @@ Object.defineProperty(obj, 'foo', {
 
 #### Dependency Tracking
 
-* Two methods `depend` and `notify`
-* `depend`: the current code depends on this dependency
-* `notify`: the dependency has changed; any previous expressions, computations, functions that have previously depended on it, should be notified so that they can be re-executed
-* updater function
+* Two methods `depend()` and `notify()`
+* `depend()`: the current code depends on this dependency
+* `notify()`: the dependency has changed; any previous expressions, computations, functions that have previously depended on it, should be notified so that they can be re-executed
+* associate a computation to a dependency, like a subscriber to the dependency
+* `autorun()`: takes an updater function where you can register dependencies
+
+#### Observer
+
+* `observe()` converts the properties in the received object and makes them reactive; it gets assigned a `Dep` instance for each converted property, which keeps track of a list of subscribing update functions, and triggers them to re-run when its setter is invoked
+* It takes any object, observes it, converts its properties into getters and setters; hooks up `Dep.depend()` and `Dep.notify()` calls to the getters and setters; then when a property is accessed on that object, it collects dependencies by calling `Dep.depend()`, and when we mutate a property, it calls `Dep.notify()` to trigger changes
+* If you add some DOM manipulations inside the `autorun()` function, you have a tiny reactivity engine that automatically keep state and DOM in sync
+
+### Plugins
+
+* `Vue.use(plugin)`
+* Refer to Vue documentation [Writing a Plugin](https://vuejs.org/v2/guide/plugins.html)
+* A plugin is a function that receives `Vue` as the first argument, and options as the second
+* Common techniques involve `Vue.mixin(options)` api
+* Mixins are reusable snippets or parts of Vue component options that can be mixed into an existing component
+* `Vue.mixin` will apply it globally
+* Usually it's a better idea to wrap this with a plugin interface; it will prevent it from being applied over and over again
+* `$options` exists on every component; contains the merged, normalized options object of that specific instance
+* Vue component options can come from a lot of places: global mixins, the component's own definition, the options that you pass to it when you're creating the instance, or from an ancestor component
+* This also contains any custom options that you add to that component
