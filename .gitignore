@@ -11,3 +11,12 @@ vue-advanced-workshop
 *.ntvs*
 *.njsproj
 *.sln
+
+
+# Nuxt build
+.nuxt
+
+# Nuxt generate
+dist
+
+.env

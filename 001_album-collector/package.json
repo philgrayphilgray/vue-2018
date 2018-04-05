@@ -1,0 +1,33 @@
+{
+  "name": "000_album-collector",
+  "version": "1.0.0",
+  "description": "Nuxt.js project",
+  "author": "philgrayphilgray <thephilgray@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "@nuxtjs/dotenv": "^1.1.0",
+    "axios": "^0.18.0",
+    "lodash": "^4.17.5",
+    "node-sass": "^4.7.2",
+    "nuxt": "^1.0.0",
+    "pug": "^2.0.2",
+    "pug-loader": "^2.3.0",
+    "sass-loader": "^6.0.7",
+    "vue-focus-lock": "^1.0.5"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.1",
+    "eslint": "^4.15.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-vue": "^4.0.0"
+  }
+}
