@@ -3,7 +3,10 @@
     .menu__message
         p   Choose a menu item below to view more details and make a selection.
     .menu__item(v-for="item in images")
-        .menu__image(:style="{backgroundImage: `url(${require('~/assets/images/' + item + '.jpg')})`}")
+        //- background image
+        //- .menu__image(:style="{backgroundImage: `url(${require('~/assets/images/' + item + '.jpg')})`}")
+        //- inline image
+        img.menu__image(:src="require(`~/assets/images/${item}.jpg`)" :alt="item")
 
 </template>
 <script>
@@ -39,14 +42,24 @@ export default {
 
 .menu__item {
   text-align: center;
-  box-shadow: 1px 2px 4px 1px $secondary-light;
+  // grid is creating extra space for box-shadow; this would be an interesting topic to explore in some detail
+  //   box-shadow: 1px 2px 4px 1px $secondary-light;
 }
+// background image
+// .menu__image {
+//   height: 170px;
+//   background-size: cover;
+//   background-repeat: no-repeat;
+//   background-position: center center;
+// }
 
+// inline image
 .menu__image {
+  // needs a polyfill for older browsers
+  object-fit: cover;
   height: 170px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
+  width: 170px;
+  margin: 0;
 }
 </style>
 
