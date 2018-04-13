@@ -40,10 +40,15 @@ export default {
   margin-bottom: $spacing-unit/2;
 }
 
-.menu__item {
-  text-align: center;
-  // grid is creating extra space for box-shadow; this would be an interesting topic to explore in some detail
-  //   box-shadow: 1px 2px 4px 1px $secondary-light;
+// inline image
+.menu__image {
+  object-fit: cover; // needs a polyfill for older browsers
+  height: 170px;
+  width: 170px;
+  margin: 0;
+  &:hover {
+    box-shadow: 1px 2px 4px 1px $secondary-light;
+  }
 }
 // background image
 // .menu__image {
@@ -52,14 +57,5 @@ export default {
 //   background-repeat: no-repeat;
 //   background-position: center center;
 // }
-
-// inline image
-.menu__image {
-  // needs a polyfill for older browsers
-  object-fit: cover;
-  height: 170px;
-  width: 170px;
-  margin: 0;
-}
 </style>
 
