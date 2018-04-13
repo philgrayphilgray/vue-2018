@@ -1,5 +1,6 @@
 <template lang="pug">
 button.button--default(role="button" @click="clickHandler()") {{buttonText}}
+  slot
 </template>
 <script>
 export default {
