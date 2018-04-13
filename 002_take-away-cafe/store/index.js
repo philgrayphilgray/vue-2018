@@ -24,10 +24,10 @@ const createStore = () => {
         }
       ],
       menu: [
-        { label: 'Americano', price: 325 },
-        { label: 'Herbal Tea', price: 300 },
-        { label: 'Iced Latte', price: 400 },
-        { label: 'Cold Brew', price: 400 }
+        { label: 'Americano', price: 325, image: 'americano' },
+        { label: 'Cold Brew', price: 400, image: 'coldbrew' },
+        { label: 'Iced Latte', price: 400, image: 'icedlatte' },
+        { label: 'Herbal Tea', price: 300, image: 'herbaltea' }
       ],
       orders: [],
       tax: 0.1,
@@ -38,7 +38,9 @@ const createStore = () => {
     },
     getters: {
       getSteps: state => state.steps,
-      currentStep: state => state.steps.indexOf(state.steps.find(s => s.active))
+      currentStep: state =>
+        state.steps.indexOf(state.steps.find(s => s.active)),
+      getMenu: state => state.menu
     },
     mutations: {
       updateActiveStep(state) {

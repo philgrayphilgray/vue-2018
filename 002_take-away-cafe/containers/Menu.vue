@@ -2,20 +2,28 @@
 .menu
     .menu__message
         p   Choose a menu item below to view more details and make a selection.
-    .menu__item(v-for="item in images")
+    .menu__item(v-for="item in menu")
         //- background image
         //- .menu__image(:style="{backgroundImage: `url(${require('~/assets/images/' + item + '.jpg')})`}")
         //- inline image
-        img.menu__image(:src="require(`~/assets/images/${item}.jpg`)" :alt="item")
+        img.menu__image(:src="require(`~/assets/images/${item.image}.jpg`)" :alt="item.label")
 
 </template>
 <script>
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
-      // this will later get passed down with the menu object as a prop
-      images: ['americano', 'coldbrew', 'herbaltea', 'icedlatte']
+      menu: null
     };
+  },
+  computed: {
+    ...mapGetters({
+      getMenu: 'getMenu'
+    })
+  },
+  beforeMount() {
+    this.menu = this.getMenu;
   }
 };
 </script>
