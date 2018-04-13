@@ -10,7 +10,7 @@
         .stepper__link
           a(href="#" @click="$store.commit('resetSteps')") Start over?
       component(:is="steps[currentIndex].component")            
-      Button(:buttonText="steps[currentIndex].nextLabel" :clickHandler="stepperNextHandler")
+      Button(:clickHandler="stepperNextHandler") {{steps[currentIndex].nextLabel}}
       
 </template>
 

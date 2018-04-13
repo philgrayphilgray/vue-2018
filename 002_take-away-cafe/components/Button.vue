@@ -1,10 +1,10 @@
 <template lang="pug">
-button.button--default(role="button" @click="clickHandler()") {{buttonText}}
+button.button--default(role="button" @click="clickHandler()")
   slot
 </template>
 <script>
 export default {
-  props: ['buttonText', 'clickHandler']
+  props: ['clickHandler']
 };
 </script>
 <style lang="scss">
