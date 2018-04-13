@@ -1,11 +1,12 @@
 <template lang="pug">
 svg(:fill="color" :height="size" :width="size")
-    use(:xlink:href="link")
+    title {{ link }} icon
+    use(:xlink:href="`#${link}`")
 </template>
 <script>
 // Use: Icon(color="#fff" link="#plus" size="24")
 // Import Icon component and icon to use:
-import plus from '~/assets/icons/plus.svg';
+import question from '~/assets/icons/question.svg';
 export default {
   props: {
     size: {
@@ -18,7 +19,7 @@ export default {
     },
     link: {
       type: String,
-      default: '#plus'
+      default: 'question'
     }
   }
 };

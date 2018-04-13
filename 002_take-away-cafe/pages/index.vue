@@ -1,5 +1,6 @@
 <template lang="pug">
 .container
+  Overlay(v-if="$store.state.overlay.toggled")
   header(role="navigation").appHeader
     .appHeader__container
       nuxt-link(to="/").appHeader__link
@@ -10,17 +11,20 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import Overlay from '../components/Overlay';
 import Stepper from '../containers/Stepper';
 
 export default {
   components: {
-    Stepper
+    Stepper,
+    Overlay
   },
 
   computed: {
     ...mapGetters({
       currentIndex: 'currentStep',
-      steps: 'getSteps'
+      steps: 'getSteps',
+      getOverlay: 'getOverlay'
     })
   },
   methods: {

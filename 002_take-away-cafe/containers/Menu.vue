@@ -1,8 +1,8 @@
 <template lang="pug">
 .menu
-    .menu__message
-        p   Choose a menu item below to view more details and make a selection.
-    .menu__item(v-for="item in menu")
+    //- .menu__message
+    //-     p   Choose a menu item below to view more details and make a selection.
+    .menu__item(v-for="(item, i) in menu" :key="item.image" @click="selectItem(i)")
         //- background image
         //- .menu__image(:style="{backgroundImage: `url(${require('~/assets/images/' + item + '.jpg')})`}")
         //- inline image
@@ -10,12 +10,16 @@
 
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   data() {
     return {
       menu: null
     };
+  },
+  methods: {
+    ...mapMutations(['toggleOverlay']),
+    ...mapActions(['selectItem'])
   },
   computed: {
     ...mapGetters({
@@ -46,6 +50,10 @@ export default {
   padding: $spacing-unit;
   text-align: center;
   margin-bottom: $spacing-unit/2;
+}
+
+.menu__item {
+  cursor: pointer;
 }
 
 // inline image
