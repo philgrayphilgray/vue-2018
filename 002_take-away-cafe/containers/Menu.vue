@@ -2,7 +2,7 @@
 .menu
     //- .menu__message
     //-     p   Choose a menu item below to view more details and make a selection.
-    .menu__item(v-for="(item, i) in menu" :key="item.image" @click="selectItem(i)")
+    .menu__item(v-for="(item, i) in menu" :key="item.image" @keypress.enter="selectItem(i)" @click="selectItem(i)" tabindex=0)
         //- background image
         //- .menu__image(:style="{backgroundImage: `url(${require('~/assets/images/' + item + '.jpg')})`}")
         //- inline image
