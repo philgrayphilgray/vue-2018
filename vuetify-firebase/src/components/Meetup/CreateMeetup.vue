@@ -40,11 +40,6 @@ v-container
 <script>
 import moment from 'moment';
 export default {
-  created: function() {
-    const dateTime = moment();
-    this.date = dateTime.format('YYYY-MM-DD');
-    this.time = dateTime.format('HH:mm');
-  },
   data() {
     return {
       title: '',
@@ -54,20 +49,6 @@ export default {
       date: '',
       time: new Date()
     };
-  },
-  methods: {
-    onCreateMeetup() {
-      if (!this.formIsValid) return;
-      const meetupData = {
-        title: this.title,
-        location: this.location,
-        imageUrl: this.imageUrl,
-        description: this.description,
-        date: this.submittableDateTime
-      };
-      this.$store.dispatch('createMeetup', meetupData);
-      this.$router.push('/meetups');
-    }
   },
   computed: {
     formIsValid() {
@@ -82,6 +63,25 @@ export default {
       date.minutes(minutes);
 
       return date.toISOString(true);
+    }
+  },
+  created: function() {
+    const dateTime = moment();
+    this.date = dateTime.format('YYYY-MM-DD');
+    this.time = dateTime.format('HH:mm');
+  },
+  methods: {
+    onCreateMeetup() {
+      if (!this.formIsValid) return;
+      const meetupData = {
+        title: this.title,
+        location: this.location,
+        imageUrl: this.imageUrl,
+        description: this.description,
+        date: this.submittableDateTime
+      };
+      this.$store.dispatch('createMeetup', meetupData);
+      this.$router.push('/meetups');
     }
   }
 };

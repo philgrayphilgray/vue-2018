@@ -22,6 +22,7 @@ import {
 import '../node_modules/vuetify/src/stylus/app.styl';
 // Helpers
 import colors from 'vuetify/es5/util/colors';
+import DateFilter from './filters/date';
 
 Vue.use(Vuetify, {
   components: {
@@ -46,6 +47,8 @@ Vue.use(Vuetify, {
     accent: colors.indigo.base // #3F51B5
   }
 });
+
+Vue.filter('date', DateFilter);
 
 Vue.config.productionTip = false;
 

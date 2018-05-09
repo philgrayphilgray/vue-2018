@@ -7,7 +7,7 @@
                     h3.primary--text {{meetup.title}}
                 v-card-media(:src="meetup.imageUrl" height="400px")
                 v-card-text
-                    p.info--text {{meetup.date}} - {{meetup.location}}
+                    p.info--text {{meetup.date | date}} - {{meetup.location}}
                     p {{meetup.description}}
                 v-card-actions
                     v-spacer
@@ -16,6 +16,7 @@
 
 <script>
 export default {
+  // eslint-disable-next-line
   props: ['id'],
   computed: {
     meetup() {

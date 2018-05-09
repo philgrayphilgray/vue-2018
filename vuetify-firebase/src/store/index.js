@@ -12,7 +12,7 @@ export const store = new Vuex.Store({
           'https://upload.wikimedia.org/wikipedia/commons/c/c9/Broadway_Crowds_%285896264776%29_crop.jpg',
         id: 'nyc',
         title: 'NYC',
-        date: new Date(),
+        date: '2018-05-05T20:00:00.000-04:00',
         location: 'Manhattan, NY',
         description:
           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia deleniti unde soluta quam, facilis praesentium tempore aut tenetur error earum exercitationem excepturi voluptatibus ducimus magni officiis illum quasi perferendis incidunt.'
@@ -22,7 +22,7 @@ export const store = new Vuex.Store({
           'https://upload.wikimedia.org/wikipedia/commons/2/22/The_Mus%C3%A9e_dOrsay_at_sunset%2C_Paris_July_2013.jpg',
         id: 'paris',
         title: 'Paris',
-        date: new Date(),
+        date: '2018-05-20T18:30:00.000-04:00',
         location: 'Paris, France',
         description:
           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia deleniti unde soluta quam, facilis praesentium tempore aut tenetur error earum exercitationem excepturi voluptatibus ducimus magni officiis illum quasi perferendis incidunt.'
