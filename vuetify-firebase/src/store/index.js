@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import * as firebase from 'firebase';
 import Chance from 'chance';
 
 Vue.use(Vuex);
@@ -28,14 +29,14 @@ export const store = new Vuex.Store({
           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia deleniti unde soluta quam, facilis praesentium tempore aut tenetur error earum exercitationem excepturi voluptatibus ducimus magni officiis illum quasi perferendis incidunt.'
       }
     ],
-    user: {
-      id: 'sdfdsfdsfkj',
-      registeredMeetups: ['paris']
-    }
+    user: null
   },
   mutations: {
     createMeetup(state, payload) {
       state.loadedMeetups.push(payload);
+    },
+    setUser(state, payload) {
+      state.user = payload;
     }
   },
   actions: {
@@ -52,6 +53,36 @@ export const store = new Vuex.Store({
       };
       // Reach out to firebase and store it
       commit('createMeetup', meetup);
+    },
+    signUserUp({ commit }, payload) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(payload.email, payload.password)
+        .then(({ user }) => {
+          const newUser = {
+            id: user.uid,
+            registeredMeetups: []
+          };
+          commit('setUser', newUser);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    signUserIn({ commit }, payload) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(payload.email, payload.password)
+        .then(({ user }) => {
+          const newUser = {
+            id: user.uid,
+            registeredMeetups: []
+          };
+          commit('setUser', newUser);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   getters: {
@@ -67,6 +98,9 @@ export const store = new Vuex.Store({
     },
     featuredMeetups(state, getters) {
       return getters.loadedMeetups.slice(0, 5);
+    },
+    user(state) {
+      return state.user;
     }
   }
 });
