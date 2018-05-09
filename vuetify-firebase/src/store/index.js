@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    loadedMeetups: null,
+    loadedMeetups: [],
     user: null,
     loading: false,
     authError: null
@@ -88,7 +88,6 @@ export const store = new Vuex.Store({
         .ref('meetups')
         .push(meetup)
         .then(data => {
-          console.log(data);
           commit('createMeetup', { ...meetup, id: data.key });
         })
         .catch(error => {
