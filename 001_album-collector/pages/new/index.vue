@@ -8,11 +8,11 @@ form.newForm(@submit.prevent="submitHandler")
 
 
 <script>
-import uniqueId from "lodash/uniqueid";
+import { uniqueId } from 'lodash';
 
-import FormInput from "../../components/FormInput";
-import ImageUpload from "../../components/ImageUpload";
-import StarRating from "../../components/StarRating";
+import FormInput from '../../components/FormInput';
+import ImageUpload from '../../components/ImageUpload';
+import StarRating from '../../components/StarRating';
 export default {
   components: {
     FormInput,
@@ -21,12 +21,12 @@ export default {
   },
   data() {
     return {
-      art: "",
+      art: '',
       rating: 0,
       newAlbum: {
-        title: "",
-        artist: "",
-        year: ""
+        title: '',
+        artist: '',
+        year: ''
       }
     };
   },
@@ -50,9 +50,9 @@ export default {
         rating: this.rating,
         id: newId
       };
-      this.$store.commit("add", newAlbumWithArt);
+      this.$store.commit('add', newAlbumWithArt);
       e.target.reset();
-      this.$router.push({ path: "/" });
+      this.$router.push({ path: '/' });
     }
   }
 };

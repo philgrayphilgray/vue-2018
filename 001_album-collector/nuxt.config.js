@@ -19,7 +19,12 @@ module.exports = {
   */
   loading: { color: '#3B8070' },
 
-  modules: [['@nuxtjs/dotenv', { only: ['UPLOAD_FILE_FUNCTION'] }]],
+  /*
+  ** env
+  */
+  env: {
+    UPLOAD_FILE_FUNCTION: process.env.UPLOAD_FILE_FUNCTION
+  },
   /*
   ** Build configuration
   */
