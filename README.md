@@ -579,6 +579,69 @@ export default {
 };
 ```
 
+## Vue-Trello (with Firebase)
+
+```bash
+npm install -g @vue/cli
+```
+
+* Manually select features: Router, Vuex, CSS Pre-processors, Linter / Formatter, Unit Testing, E2E Testing, SCC/SASS, ESLint + Prettier, Link on Save, Jest, Cypress, In package.json, Yarn
+* Start the dev server
+
+```bash
+cd <project name>
+yarn serve
+```
+
+* Install `Pug` and `Vuetify` and `Axios`
+
+```bash
+yarn add pug pug-loader vuetify axios
+```
+
+* Configure `Vuetfiy`
+
+```js
+// src/main.js
+
+import Vue from "vue";
+import Vuetify from "vuetify"; // 1. vuetify js
+import "vuetify/dist/vuetify.min.css"; // 2. vuetify css
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+
+Vue.config.productionTip = false;
+Vue.use(Vuetify); // 3. use vuetify
+
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount("#app");
+
+```
+
+* Add the font to the head of `index.html`
+
+```html
+<!-- public/index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<!-- ...other head stuff -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>
+```
+
+
+
+
 ## Notes from [Advanced Vue.js Features from the Ground Up](https://frontendmasters.com/courses/advanced-vue/)
 
 ### Reactivity
