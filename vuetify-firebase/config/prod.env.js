@@ -1,4 +1,9 @@
-'use strict'
+'use strict';
 module.exports = {
-  NODE_ENV: '"production"'
-}
+  NODE_ENV: '"production"',
+  FIREBASE_API_KEY: process.env.FIREBASE_API_KEY_PROD,
+  FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN_PROD,
+  FIREBASE_DB_URL: process.env.FIREBASE_DB_URL_PROD,
+  FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID_PROD,
+  FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET_PROD
+};
