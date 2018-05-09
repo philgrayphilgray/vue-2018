@@ -1,6 +1,6 @@
 # 000_album-collector
 
-> Nuxt.js project
+> A simple Nuxt.js app. Live demo: [https://000album-collector-syizwlkeyw.now.sh/](https://000album-collector-syizwlkeyw.now.sh/)
 
 ## Build Setup
 

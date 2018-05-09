@@ -6,7 +6,7 @@ module.exports = {
     htmlAttrs: {
       lang: 'en'
     },
-    title: '000_album-collector',
+    title: 'Vue Album Collector App',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -19,7 +19,12 @@ module.exports = {
   */
   loading: { color: '#3B8070' },
 
-  modules: [['@nuxtjs/dotenv', { only: ['UPLOAD_FILE_FUNCTION'] }]],
+  /*
+  ** env
+  */
+  env: {
+    UPLOAD_FILE_FUNCTION: process.env.UPLOAD_FILE_FUNCTION
+  },
   /*
   ** Build configuration
   */
