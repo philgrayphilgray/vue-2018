@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import AuthGuard from './auth-guard';
 import Home from '@/components/Home';
 import Meetups from '@/components/Meetup/Meetups';
 import CreateMeetup from '@/components/Meetup/CreateMeetup';
@@ -31,12 +32,14 @@ export default new Router({
     {
       path: '/meetup/new',
       name: 'CreateMeetup',
-      component: CreateMeetup
+      component: CreateMeetup,
+      beforeEnter: AuthGuard
     },
     {
       path: '/profile',
       name: 'Profile',
-      component: Profile
+      component: Profile,
+      beforeEnter: AuthGuard
     },
     {
       path: '/signup',

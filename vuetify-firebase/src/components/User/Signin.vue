@@ -1,5 +1,8 @@
 <template lang="pug">
 v-container.mt-3
+  v-layout(row v-if="error")
+    v-flex(xs12 md6 offset-md3)
+      app-alert(@dismissed="onDismissed" :text="error.message")
   v-layout(row)
     v-flex(xs12 md6 offset-md3)
       v-card
@@ -14,7 +17,9 @@ v-container.mt-3
                   v-text-field(name="password" label="Password" id="password" v-model="password" type="password" required)
               v-layout(row)
                 v-flex(xs12)
-                  v-btn(type="submit") Sign in
+                  v-btn(type="submit" :disabled="loading" :loading="loading") Sign in
+                    span.custom-loader(slot="loader")
+                      v-icon(light) cached
 </template>
 
 <script>
@@ -28,6 +33,12 @@ export default {
   computed: {
     user() {
       return this.$store.getters.user;
+    },
+    error() {
+      return this.$store.getters.error;
+    },
+    loading() {
+      return this.$store.getters.loading;
     }
   },
   watch: {
@@ -44,6 +55,9 @@ export default {
         email: this.email,
         password: this.password
       });
+    },
+    onDismissed() {
+      this.$store.dispatch('clearError');
     }
   }
 };

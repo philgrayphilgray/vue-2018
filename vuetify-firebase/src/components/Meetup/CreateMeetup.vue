@@ -24,17 +24,14 @@ v-container
         v-layout(row).mb-3
           v-flex(xs12 sm6 offset-sm3)
             h4 Choose a date & Time
-        v-layout(row wrap)
-          v-flex(xs12 sm6 md3 offset-sm3 offset-md2)
-            v-date-picker(v-model="date")
-            p {{ date }}
-          v-flex(xs12 sm6 md3 offset-sm3 offset-md2)
-            v-time-picker(v-model="time")
-            p {{time}}
-        v-layout(row)
-          v-flex(xs12 sm6 offset-sm3)
+        v-layout(row wrap justify-center align-center)
+          v-flex(xs12  text-xs-center )
+            v-date-picker(v-model="date" landscape )
+          v-flex(xs12  text-xs-center )
+            v-time-picker(v-model="time"  landscape)
+        v-layout.mt-3(row)
+          v-flex(xs12 sm6 offset-sm3 text-xs-center)
             v-btn.primary(:disabled="!formIsValid" type="submit") Create Meetup
-            p {{ submittableDateTime }}
 </template>
 
 <script>

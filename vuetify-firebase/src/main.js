@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import * as firebase from 'firebase';
 import App from './App';
+import '../node_modules/vuetify/src/stylus/app.styl';
+import './main.css';
 import router from './router';
 import { store } from './store';
 import {
@@ -18,12 +20,15 @@ import {
   VTextField,
   VDatePicker,
   VTimePicker,
+  VAlert,
+  VProgressCircular,
   transitions
 } from 'vuetify';
-import '../node_modules/vuetify/src/stylus/app.styl';
+
 // Helpers
 import colors from 'vuetify/es5/util/colors';
 import DateFilter from './filters/date';
+import AlertComponent from './components/Shared/Alert';
 
 Vue.use(Vuetify, {
   components: {
@@ -40,6 +45,8 @@ Vue.use(Vuetify, {
     VTextField,
     VDatePicker,
     VTimePicker,
+    VAlert,
+    VProgressCircular,
     transitions
   },
   theme: {
@@ -50,6 +57,10 @@ Vue.use(Vuetify, {
 });
 
 Vue.filter('date', DateFilter);
+
+// register alert component
+
+Vue.component('app-alert', AlertComponent);
 
 Vue.config.productionTip = false;
 
@@ -66,6 +77,12 @@ new Vue({
       projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
       storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET
     });
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch('autoSignIn', user);
+      }
+    });
+    this.$store.dispatch('loadMeetups');
   },
   render: h => h(App)
 });

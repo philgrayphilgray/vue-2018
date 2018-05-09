@@ -6,6 +6,10 @@ v-app
         v-list-tile-action
           v-icon {{item.icon}}
         v-list-tile-content {{item.title}}
+      v-list-tile(v-if="userIsAuthenticated" @click="onLogout")
+        v-list-tile-action
+          v-icon exit_to_app
+        v-list-tile-content Logout
   v-toolbar(dark)
     v-toolbar-side-icon.hidden-sm-and-up(@click="sideNav=!sideNav")
     router-link(to="/" tag="span" style="cursor:pointer")
@@ -15,6 +19,10 @@ v-app
       v-btn(flat :to="item.link") 
         v-icon(left) {{item.icon}}
         | {{item.title}}
+    v-toolbar-items.hidden-xs-only(v-if="userIsAuthenticated")
+      v-btn(flat @click="onLogout") 
+        v-icon(left) exit_to_app
+        | Logout
   v-content
     main
       router-view
@@ -52,6 +60,11 @@ export default {
         this.$store.getters.user !== null &&
         this.$store.getters.user !== undefined
       );
+    }
+  },
+  methods: {
+    onLogout() {
+      this.$store.dispatch('logout');
     }
   }
 };

@@ -1,5 +1,8 @@
 <template lang="pug">
 v-container.mt-3
+  v-layout(row v-if="error")
+    v-flex(xs12 md6 offset-md3)
+      app-alert(@dismissed="onDismissed" :text="error.message")
   v-layout(row)
     v-flex(xs12 md6 offset-md3)
       v-card
@@ -17,7 +20,9 @@ v-container.mt-3
                   v-text-field(name="confirmPassword" label="Confirm Password" id="confirmPassword" v-model="confirmPassword" type="password" :rules="[comparePasswords]")
               v-layout(row)
                 v-flex(xs12)
-                  v-btn(type="submit") Sign up
+                  v-btn(type="submit" :disabled="loading" :loading="loading") Sign up
+                    span.custom-loader(slot="loader")
+                      v-icon(light) cached
 </template>
 
 <script>
@@ -37,6 +42,12 @@ export default {
     },
     user() {
       return this.$store.getters.user;
+    },
+    error() {
+      return this.$store.getters.error;
+    },
+    loading() {
+      return this.$store.getters.loading;
     }
   },
   watch: {
@@ -53,6 +64,9 @@ export default {
         email: this.email,
         password: this.password
       });
+    },
+    onDismissed() {
+      this.$store.dispatch('clearError');
     }
   }
 };
