@@ -4,8 +4,7 @@ dist/
 npm-debug.log
 yarn-error.log
 vue-advanced-workshop
-nuxtent-test
-vue-trello-firebase
+
 
 # Editor directories and files
 .idea
