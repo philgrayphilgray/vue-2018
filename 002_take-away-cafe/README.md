@@ -1,10 +1,10 @@
 # cafe-queuer
 
-> Nuxt.js project
+> Original Nuxt.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ npm install # Or yarn install
 

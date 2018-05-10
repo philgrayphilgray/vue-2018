@@ -1,10 +1,10 @@
 # vuetify-firebase
 
-> A Vue.js project
+> Project source: [https://www.youtube.com/playlist?list=PL55RiY5tL51qxUbODJG9cgrsVd7ZHbPrt](https://www.youtube.com/playlist?list=PL55RiY5tL51qxUbODJG9cgrsVd7ZHbPrt)
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
