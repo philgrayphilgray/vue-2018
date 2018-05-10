@@ -33,10 +33,10 @@ v-container
           v-flex(xs12 sm6 offset-sm3)
             h4 Choose a date & Time
         v-layout(row wrap justify-center align-center)
-          v-flex(xs12  text-xs-center )
-            v-date-picker(v-model="date" landscape )
-          v-flex(xs12  text-xs-center )
-            v-time-picker(v-model="time"  landscape)
+          v-flex(xs12 sm8  text-xs-center )
+            v-date-picker(v-model="date" landscape style="width:100%;" )
+          v-flex(xs12 sm8  text-xs-center )
+            v-time-picker(v-model="time"  landscape style="width:100%;")
         v-layout.mt-3(row)
           v-flex(xs12 sm6 offset-sm3 text-xs-center)
             v-btn.primary(:disabled="!formIsValid" type="submit") Create Meetup

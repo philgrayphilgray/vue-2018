@@ -22,6 +22,8 @@ import {
   VTimePicker,
   VAlert,
   VProgressCircular,
+  VDialog,
+  VDivider,
   transitions
 } from 'vuetify';
 
@@ -29,6 +31,7 @@ import {
 import colors from 'vuetify/es5/util/colors';
 import DateFilter from './filters/date';
 import AlertComponent from './components/Shared/Alert';
+import EditMeetupDetailsDialog from './components/Meetup/Edit/EditMeetupDetailsDialog';
 
 Vue.use(Vuetify, {
   components: {
@@ -47,6 +50,8 @@ Vue.use(Vuetify, {
     VTimePicker,
     VAlert,
     VProgressCircular,
+    VDialog,
+    VDivider,
     transitions
   },
   theme: {
@@ -61,6 +66,7 @@ Vue.filter('date', DateFilter);
 // register alert component
 
 Vue.component('app-alert', AlertComponent);
+Vue.component('app-edit-meetup-details-dialog', EditMeetupDetailsDialog);
 
 Vue.config.productionTip = false;
 
