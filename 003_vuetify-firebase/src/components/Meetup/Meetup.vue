@@ -17,7 +17,7 @@
                     p {{meetup.description}}
                 v-card-actions
                     v-spacer
-                    v-btn.primary Register
+                    app-register-dialog(:meetupId="id" v-if="userIsAuthenticated && !userIsCreator")
 </template>
 
 <script>

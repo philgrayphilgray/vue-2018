@@ -32,6 +32,7 @@ import colors from 'vuetify/es5/util/colors';
 import DateFilter from './filters/date';
 import AlertComponent from './components/Shared/Alert';
 import EditMeetupDetailsDialog from './components/Meetup/Edit/EditMeetupDetailsDialog';
+import RegisterDialog from './components/Meetup/Registration/RegisterDialog';
 
 Vue.use(Vuetify, {
   components: {
@@ -67,6 +68,7 @@ Vue.filter('date', DateFilter);
 
 Vue.component('app-alert', AlertComponent);
 Vue.component('app-edit-meetup-details-dialog', EditMeetupDetailsDialog);
+Vue.component('app-register-dialog', RegisterDialog);
 
 Vue.config.productionTip = false;
 
@@ -86,6 +88,7 @@ new Vue({
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch('autoSignIn', user);
+        this.$store.dispatch('fetchUserData');
       }
     });
     this.$store.dispatch('loadMeetups');
