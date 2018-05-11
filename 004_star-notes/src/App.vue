@@ -1,12 +1,12 @@
 <template lang="pug">
   v-app
-    v-navigation-drawer(v-model="sideNav" fixed app)
+    v-navigation-drawer(v-model="sideNav" fixed app v-if="userIsAuthenticated")
         v-list
             v-list-tile
                 v-list-tile-action
                     v-icon fa-github
     v-toolbar
-        v-toolbar-side-icon(@click.native.stop="sideNav = !sideNav")
+        v-toolbar-side-icon(@click.native.stop="sideNav = !sideNav" v-if="userIsAuthenticated")
         v-toolbar-title StarNotes
         v-spacer
         v-toolbar-items
@@ -26,6 +26,11 @@ export default {
     return {
       sideNav: false,
     };
+  },
+  computed: {
+    userIsAuthenticated() {
+      return false;
+    },
   },
 };
 </script>

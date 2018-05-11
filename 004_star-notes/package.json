@@ -15,13 +15,19 @@
   },
   "dependencies": {
     "@icon/font-awesome": "^4.7.0-1",
+    "axios": "^0.18.0",
+    "chance": "^1.0.16",
+    "lodash": "^4.17.10",
     "node-sass": "^4.9.0",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
     "sass-loader": "^7.0.1",
     "vue": "^2.5.2",
+    "vue-dragscroll": "^1.4.2",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.0.0"
+    "vuedraggable": "^2.16.0",
+    "vuetify": "^1.0.0",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
