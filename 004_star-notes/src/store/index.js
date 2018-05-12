@@ -81,6 +81,9 @@ const store = new Vuex.Store({
           console.log(error);
         });
     },
+    logout({ commit }) {
+      commit('setUser', null);
+    },
   },
   getters: {
     user(state) {

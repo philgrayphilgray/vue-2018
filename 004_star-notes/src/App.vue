@@ -11,12 +11,14 @@
         v-spacer
         v-toolbar-items
             v-menu(bottom offset-y)
-              v-btn(flat slot="activator")
-                  v-icon(right) fa-github
+              v-btn(flat slot="activator" v-if="!userIsAuthenticated")
+                v-icon(right ) fa-github
+              v-avatar.ma-3(v-else slot="activator" size="36px")
+                img(:src="user.user.photoURL")
               v-list
                 v-btn(v-if="!userIsAuthenticated" @click="onSignUserIn")
                   v-list-tile-title Sign in
-                v-btn(v-if="userIsAuthenticated")  
+                v-btn(v-if="userIsAuthenticated" @click="onSignUserOut")  
                   v-list-tile-title Sign out
     v-content
         main(@click="sideNav = false")
@@ -41,10 +43,18 @@ export default {
         this.$store.getters.user !== undefined
       );
     },
+    user() {
+      return this.$store.getters.user;
+    },
   },
   methods: {
     onSignUserIn() {
       this.$store.dispatch('signUserIn');
+      this.$router.push('/boards');
+    },
+    onSignUserOut() {
+      this.$store.dispatch('logout');
+      this.$router.push('/');
     },
   },
 };

@@ -14,7 +14,7 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/b/:idBoard',
+      path: '/boards/',
       name: 'Boards',
       component: Boards,
       beforeEnter: AuthGuard,
