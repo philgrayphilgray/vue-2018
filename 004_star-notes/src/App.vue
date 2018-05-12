@@ -10,8 +10,14 @@
         v-toolbar-title StarNotes
         v-spacer
         v-toolbar-items
-            v-btn(flat)
-                v-icon(right) fa-github
+            v-menu(bottom offset-y)
+              v-btn(flat slot="activator")
+                  v-icon(right) fa-github
+              v-list
+                v-btn(v-if="!userIsAuthenticated" @click="onSignUserIn")
+                  v-list-tile-title Sign in
+                v-btn(v-if="userIsAuthenticated")  
+                  v-list-tile-title Sign out
     v-content
         main(@click="sideNav = false")
             router-view
@@ -25,11 +31,20 @@ export default {
   data() {
     return {
       sideNav: false,
+      dialog: false,
     };
   },
   computed: {
     userIsAuthenticated() {
-      return false;
+      return (
+        this.$store.getters.user !== null &&
+        this.$store.getters.user !== undefined
+      );
+    },
+  },
+  methods: {
+    onSignUserIn() {
+      this.$store.dispatch('signUserIn');
     },
   },
 };

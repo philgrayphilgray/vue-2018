@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import * as firebase from 'firebase';
 import axios from 'axios';
 import Chance from 'chance';
 
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
     userLoadedBoard: {}, // the current board the user is viewing
     userStarredRepos: [], // all repos starred by user, all data
     userBoards: [], // list of board ids
+    user: null,
   },
   mutations: {
     loadStarredRepos(state, payload) {
@@ -29,8 +31,14 @@ const store = new Vuex.Store({
 
       state.demoLoadedBoard.lists.push(newList);
     },
+    setUser(state, payload) {
+      state.user = payload;
+    },
   },
   actions: {
+    autoSignIn({ commit }, payload) {
+      commit('setUser', payload);
+    },
     loadDemo({ commit }) {
       axios
         .get('https://api.github.com/users/octocat/starred')
@@ -55,8 +63,29 @@ const store = new Vuex.Store({
           console.log(error);
         });
     },
+    // eslint-disable-next-line
+    signUserIn({ commit }, payload) {
+      // eslint-disable-next-line
+      const provider = new firebase.auth.GithubAuthProvider();
+
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+          // eslint-disable-next-line
+          console.log(result);
+          commit('setUser', result);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+        });
+    },
   },
   getters: {
+    user(state) {
+      return state.user;
+    },
     demoLoadedBoard(state) {
       return state.demoLoadedBoard;
     },

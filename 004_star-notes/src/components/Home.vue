@@ -20,6 +20,12 @@ export default {
     demoBoard() {
       return this.$store.getters.demoLoadedBoard;
     },
+    userIsAuthenticated() {
+      return (
+        this.$store.getters.user !== null &&
+        this.$store.getters.user !== undefined
+      );
+    },
   },
 };
 </script>
