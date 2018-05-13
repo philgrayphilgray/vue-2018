@@ -13,8 +13,8 @@
             v-menu(bottom offset-y)
               v-btn(flat slot="activator" v-if="!userIsAuthenticated")
                 v-icon(right ) fa-github
-              v-avatar.ma-3(v-else slot="activator" size="36px")
-                img(:src="user.user.photoURL")
+              v-avatar.ma-3(v-if="userIsAuthenticated" slot="activator" size="36px")
+                img(:src="user.photoURL")
               v-list
                 v-btn(v-if="!userIsAuthenticated" @click="onSignUserIn")
                   v-list-tile-title Sign in
@@ -46,15 +46,17 @@ export default {
     user() {
       return this.$store.getters.user;
     },
+    loading() {
+      return this.$store.getters.loading;
+    },
   },
   methods: {
     onSignUserIn() {
       this.$store.dispatch('signUserIn');
-      this.$router.push('/boards');
     },
     onSignUserOut() {
       this.$store.dispatch('logout');
-      this.$router.push('/');
+      this.$router.replace('/');
     },
   },
 };

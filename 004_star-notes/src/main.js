@@ -13,26 +13,24 @@ Vue.use(Vuetify);
 Vue.component('app-board', Board);
 
 Vue.config.productionTip = false;
-
+firebase.initializeApp({
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.VUE_APP_FIREBASE_DB_URL,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+});
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  created() {
-    this.$store.dispatch('loadDemo');
-    firebase.initializeApp({
-      apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
-      authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
-      databaseURL: process.env.VUE_APP_FIREBASE_DB_URL,
-      projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
-      storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
-    });
-    firebase.auth().onAuthStateChanged((user) => {
+firebase.auth().onAuthStateChanged((user) => {
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    created() {
       if (user) {
         this.$store.dispatch('autoSignIn', user);
       }
-    });
-  },
-  render: h => h(App),
+    },
+    render: h => h(App),
+  });
 });
