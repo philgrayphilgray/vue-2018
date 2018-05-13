@@ -6,10 +6,18 @@
                 v-list-tile-content
                   v-list-tile-title
                     h2 {{user.displayName}}
-
                 v-list-tile-action
                     v-icon fa-github
-                  
+            v-list-tile(to="/boards")
+                v-list-tile-content
+                  v-list-tile-title Dashboard
+                v-list-tile-action
+                    v-icon dashboard
+            v-list-tile(@click="onSignUserOut")
+                v-list-tile-content
+                  v-list-tile-title Sign Out
+                v-list-tile-action
+                    v-icon exit_to_app
     v-toolbar
         v-toolbar-side-icon(@click.native.stop="sideNav = !sideNav" v-if="userIsAuthenticated")
         v-toolbar-title StarNotes
