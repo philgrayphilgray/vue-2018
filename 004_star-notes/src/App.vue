@@ -3,8 +3,13 @@
     v-navigation-drawer(v-model="sideNav" fixed app v-if="userIsAuthenticated")
         v-list
             v-list-tile
+                v-list-tile-content
+                  v-list-tile-title
+                    h2 {{user.displayName}}
+
                 v-list-tile-action
                     v-icon fa-github
+                  
     v-toolbar
         v-toolbar-side-icon(@click.native.stop="sideNav = !sideNav" v-if="userIsAuthenticated")
         v-toolbar-title StarNotes
