@@ -14,6 +14,8 @@ const store = new Vuex.Store({
     userLoadedBoard: null, // the current board the user is viewing
     userStarredRepos: [], // all repos starred by user, all data
     userBoards: [], // list of board ids
+    userCards: [], // list of all user cards; each also has an idList and idBoard
+    userLists: [],
     user: null,
     loading: false,
     error: null,
@@ -42,7 +44,9 @@ const store = new Vuex.Store({
 
       state.demoLoadedBoard.lists.push(newList);
     },
-
+    createNewList(state, payload) {
+      state.userLists.push(payload);
+    },
     createNewBoard(state, payload) {
       state.userBoards.push(payload);
     },
@@ -51,6 +55,9 @@ const store = new Vuex.Store({
     },
     setUserLoadedBoard(state, payload) {
       state.userLoadedBoard = payload;
+    },
+    loadUserlists(state, payload) {
+      state.userLists = payload;
     },
     setUser(state, payload) {
       state.user = payload;
@@ -88,28 +95,25 @@ const store = new Vuex.Store({
           commit('createNewDemoList', 'repos to remember');
         })
         .catch((error) => {
-          console.log(error);
+          commit('setError', error);
           commit('setLoading', false);
         });
     },
-    // eslint-disable-next-line
-    signUserIn({ commit, dispatch }, payload) {
+    signUserIn({ commit, dispatch }) {
       commit('setLoading', true);
-      // eslint-disable-next-line
       const provider = new firebase.auth.GithubAuthProvider();
-
       firebase
         .auth()
         .signInWithPopup(provider)
         .then(({ user }) => {
-          console.log(user);
           commit('setUser', user);
           dispatch('loadUserBoards');
+
           commit('setLoading', false);
           router.push('/boards');
         })
         .catch((error) => {
-          console.log(error);
+          commit('setError', error);
           commit('setLoading', false);
         });
     },
@@ -121,18 +125,16 @@ const store = new Vuex.Store({
           commit('setUser', null);
           commit('setUserLoadedBoard', null);
           commit('loadUserBoards', []);
-
-          console.log('logout success');
+          commit('loadUserLists', []);
         })
         .catch((error) => {
-          console.log(`logout error: ${error}`);
+          commit('setError', error);
         });
     },
     createNewBoard({ commit, getters }, payload) {
       commit('setLoading', true);
       const user = getters.user.uid;
-      // eslint-disable-next-line
-      console.log(user);
+
       const newBoard = { name: payload };
       firebase
         .database()
@@ -142,15 +144,58 @@ const store = new Vuex.Store({
         .then((data) => {
           commit('setLoading', false);
           commit('createNewBoard', { name: payload, id: data.key });
-          // set the userLoadedBoard to the new board and push the router to the new board
         })
         .catch((error) => {
-          console.log(error);
+          commit('setError', error);
           commit('setLoading', false);
         });
     },
-    // eslint-disable-next-line
-    loadUserBoards({ commit, getters }) {
+    createNewList({ commit, getters }, payload) {
+      commit('setLoading', true);
+      const user = getters.user.uid;
+
+      const newList = { name: payload.name, idBoard: payload.idBoard };
+      firebase
+        .database()
+        .ref(`/users/${user}`)
+        .child('/lists')
+        .push(newList)
+        .then((data) => {
+          commit('setLoading', false);
+          commit('createNewList', {
+            ...newList,
+            id: data.key,
+          });
+        })
+        .catch((error) => {
+          commit('setError', error);
+          commit('setLoading', false);
+        });
+    },
+
+    loadUserLists({ commit, getters }) {
+      const user = getters.user.uid;
+      firebase
+        .database()
+        .ref(`users/${user}`)
+        .child('/lists')
+        .once('value')
+        .then((data) => {
+          if (data.val() !== null && data.val() !== undefined) {
+            const userLists = Object.entries(data.val()).map(list => ({
+              id: list[0],
+              name: list[1].name,
+              idBoard: list[1].idBoard,
+            }));
+            commit('loadUserlists', userLists);
+          }
+        })
+        .catch((error) => {
+          commit('setError', error);
+        });
+    },
+
+    loadUserBoards({ commit, getters, dispatch }) {
       const user = getters.user.uid;
       firebase
         .database()
@@ -164,10 +209,11 @@ const store = new Vuex.Store({
               name: board[1].name,
             }));
             commit('loadUserBoards', userBoards);
+            dispatch('loadUserLists');
           }
         })
         .catch((error) => {
-          console.log(error);
+          commit('setError', error);
         });
     },
     setUserLoadedBoard({ commit, dispatch, getters }, payload) {
@@ -200,6 +246,13 @@ const store = new Vuex.Store({
     loadedBoard(state) {
       return state.userLoadedBoard;
     },
+    userLists(state) {
+      return state.userLists;
+    },
+    // loadedBoardLists(state, getters) {
+    //   return state.userLists.filter(list => list.idBoard === getters.loadedBoard.id);
+    // },
+    loadedBoardLists: state => boardId => state.userLists.filter(list => list.idBoard === boardId),
   },
 });
 

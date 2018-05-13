@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app
-    v-navigation-drawer(v-model="sideNav" fixed app v-if="userIsAuthenticated")
+    v-navigation-drawer(v-model="sideNav" fixed app v-if="userIsAuthenticated" @click.native.stop="sideNav = !sideNav")
         v-list
             v-list-tile
                 v-list-tile-content
@@ -8,6 +8,7 @@
                     h2 {{user.displayName}}
                 v-list-tile-action
                     v-icon fa-github
+            v-divider
             v-list-tile(to="/boards")
                 v-list-tile-content
                   v-list-tile-title Dashboard

@@ -44,16 +44,10 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
   if (requiresAuth && !currentUser) {
-    // eslint-disable-next-line
-    console.log('requiresAuth && !currentUser');
     next('/');
   } else if (requiresAuth && currentUser) {
-    // eslint-disable-next-line
-    console.log('requiresAuth && currentUser');
     next();
   } else {
-    // eslint-disable-next-line
-    console.log('else');
     next();
   }
 });
