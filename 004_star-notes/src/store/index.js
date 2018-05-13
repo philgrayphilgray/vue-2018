@@ -11,7 +11,7 @@ const store = new Vuex.Store({
   state: {
     demoStarredRepos: [], // all repos starred by demo user
     demoLoadedBoard: {}, // the board to display on the homepage
-    userLoadedBoard: {}, // the current board the user is viewing
+    userLoadedBoard: null, // the current board the user is viewing
     userStarredRepos: [], // all repos starred by user, all data
     userBoards: [], // list of board ids
     user: null,
@@ -42,14 +42,25 @@ const store = new Vuex.Store({
 
       state.demoLoadedBoard.lists.push(newList);
     },
+
+    createNewBoard(state, payload) {
+      state.userBoards.push(payload);
+    },
+    loadUserBoards(state, payload) {
+      state.userBoards = payload;
+    },
+    setUserLoadedBoard(state, payload) {
+      state.userLoadedBoard = payload;
+    },
     setUser(state, payload) {
       state.user = payload;
     },
   },
   actions: {
-    autoSignIn({ commit }, payload) {
+    autoSignIn({ commit, dispatch }, payload) {
       commit('setLoading', true);
       commit('setUser', payload);
+      dispatch('loadUserBoards');
       commit('setLoading', false);
     },
     clearError({ commit }) {
@@ -77,13 +88,12 @@ const store = new Vuex.Store({
           commit('createNewDemoList', 'repos to remember');
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.log(error);
           commit('setLoading', false);
         });
     },
     // eslint-disable-next-line
-    signUserIn({ commit }, payload) {
+    signUserIn({ commit, dispatch }, payload) {
       commit('setLoading', true);
       // eslint-disable-next-line
       const provider = new firebase.auth.GithubAuthProvider();
@@ -92,14 +102,13 @@ const store = new Vuex.Store({
         .auth()
         .signInWithPopup(provider)
         .then(({ user }) => {
-          // eslint-disable-next-line
           console.log(user);
           commit('setUser', user);
+          dispatch('loadUserBoards');
           commit('setLoading', false);
           router.push('/boards');
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.log(error);
           commit('setLoading', false);
         });
@@ -110,13 +119,60 @@ const store = new Vuex.Store({
         .signOut()
         .then(() => {
           commit('setUser', null);
-          // eslint-disable-next-line
-          console.log(`logout success`);
+          commit('setUserLoadedBoard', null);
+          commit('loadUserBoards', []);
+
+          console.log('logout success');
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.log(`logout error: ${error}`);
         });
+    },
+    createNewBoard({ commit, getters }, payload) {
+      commit('setLoading', true);
+      const user = getters.user.uid;
+      // eslint-disable-next-line
+      console.log(user);
+      const newBoard = { name: payload };
+      firebase
+        .database()
+        .ref(`/users/${user}`)
+        .child('/boards')
+        .push(newBoard)
+        .then((data) => {
+          commit('setLoading', false);
+          commit('createNewBoard', { name: payload, id: data.key });
+          // set the userLoadedBoard to the new board and push the router to the new board
+        })
+        .catch((error) => {
+          console.log(error);
+          commit('setLoading', false);
+        });
+    },
+    // eslint-disable-next-line
+    loadUserBoards({ commit, getters }) {
+      const user = getters.user.uid;
+      firebase
+        .database()
+        .ref(`users/${user}`)
+        .child('/boards')
+        .once('value')
+        .then((data) => {
+          if (data.val() !== null && data.val() !== undefined) {
+            const userBoards = Object.entries(data.val()).map(board => ({
+              id: board[0],
+              name: board[1].name,
+            }));
+            commit('loadUserBoards', userBoards);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    setUserLoadedBoard({ commit, dispatch, getters }, payload) {
+      const selectedBoard = getters.getLoadedBoard(payload);
+      commit('setUserLoadedBoard', selectedBoard);
     },
   },
   getters: {
@@ -137,6 +193,13 @@ const store = new Vuex.Store({
     },
     getDemoListCardsByListId: state => listId =>
       state.demoLoadedBoard.cards.filter(card => card.idList === listId),
+    userBoards(state) {
+      return state.userBoards;
+    },
+    getLoadedBoard: state => boardId => state.userBoards.filter(board => board.id === boardId)[0],
+    loadedBoard(state) {
+      return state.userLoadedBoard;
+    },
   },
 });
 

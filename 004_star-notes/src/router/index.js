@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 
 import Home from '@/components/Home';
 import Boards from '@/components/Boards';
+import LoadedBoard from '@/components/LoadedBoard';
 
 Vue.use(Router);
 
@@ -21,6 +22,14 @@ const router = new Router({
       path: '/boards/',
       name: 'Boards',
       component: Boards,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/b/:boardId',
+      name: 'LoadedBoard',
+      component: LoadedBoard,
       meta: {
         requiresAuth: true,
       },
