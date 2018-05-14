@@ -10,7 +10,7 @@ v-container.board(fluid)
                         v-icon more_horiz
                 v-container
                     v-layout(row wrap)
-                        Card(v-for="card in listCards(list.id)" :card="card" :key="card.id")
+                        DemoCard(v-for="card in listCards(list.id)" :card="card" :key="card.id")
                         v-card-actions.pa-0
                         v-btn(flat block) Add a card...
         v-flex.ma-3
@@ -34,13 +34,13 @@ v-container.board(fluid)
 
 </template>
 <script>
-import Card from './Card';
+import DemoCard from './DemoCard';
 
 export default {
   // eslint-disable-next-line
   props: ['board'],
   components: {
-    Card,
+    DemoCard,
   },
   data() {
     return {

@@ -30,7 +30,7 @@ const store = new Vuex.Store({
     clearError(state) {
       state.error = null;
     },
-    loadStarredRepos(state, payload) {
+    loadDemoStarredRepos(state, payload) {
       state.demoStarredRepos = payload;
     },
     loadDemoBoard(state, payload) {
@@ -62,6 +62,18 @@ const store = new Vuex.Store({
     loadUserLists(state, payload) {
       state.userLists = payload;
     },
+    loadUserCards(state, payload) {
+      state.userCards = payload;
+    },
+    createNewCard(state, payload) {
+      state.userCards.push(payload);
+    },
+    deleteCard(state, payload) {
+      state.userCards = state.userCards.filter(card => card.id !== payload);
+    },
+    loadUserStarredRepos(state, payload) {
+      state.userStarredRepos = payload;
+    },
     setUser(state, payload) {
       state.user = payload;
     },
@@ -71,6 +83,7 @@ const store = new Vuex.Store({
       commit('setLoading', true);
       commit('setUser', payload);
       dispatch('loadUserBoards');
+      dispatch('loadUserStarredRepos');
       commit('setLoading', false);
     },
     clearError({ commit }) {
@@ -81,7 +94,7 @@ const store = new Vuex.Store({
       axios
         .get('https://api.github.com/users/octocat/starred')
         .then(({ data }) => {
-          commit('loadStarredRepos', data);
+          commit('loadDemoStarredRepos', data);
           const id = 'demoBoard123';
           const name = 'Demo Board';
           const userDescription = '';
@@ -111,7 +124,7 @@ const store = new Vuex.Store({
         .then(({ user }) => {
           commit('setUser', user);
           dispatch('loadUserBoards');
-
+          dispatch('loadUserStarredRepos');
           commit('setLoading', false);
           router.push('/boards');
         })
@@ -175,7 +188,47 @@ const store = new Vuex.Store({
           commit('setLoading', false);
         });
     },
-    deleteList({ commit, getters }, payload) {
+
+    createNewCard({ commit, getters }, payload) {
+      const user = getters.user.uid;
+      const newCard = {
+        clone_url: payload.clone_url,
+        name: payload.name,
+        stargazers_count: payload.stargazers_count,
+        description: payload.description,
+        owner: {
+          avatar_url: payload.owner.avatar_url,
+          login: payload.owner.login,
+          url: payload.owner.url,
+        },
+        idBoard: payload.idBoard,
+        idList: payload.idList,
+        notes: payload.notes,
+      };
+      firebase
+        .database()
+        .ref(`/users/${user}`)
+        .child('/cards')
+        .push(newCard)
+        .then((data) => {
+          commit('createNewCard', {
+            ...newCard,
+            id: data.key,
+          });
+        });
+    },
+    deleteCard({ commit, getters }, payload) {
+      const user = getters.user.uid;
+      firebase
+        .database()
+        .ref(`users/${user}`)
+        .child(`/cards/${payload.cardId}`)
+        .remove()
+        .then(() => {
+          commit('deleteCard', payload.cardId);
+        });
+    },
+    deleteList({ commit, getters, dispatch }, payload) {
       const user = getters.user.uid;
       firebase
         .database()
@@ -184,9 +237,12 @@ const store = new Vuex.Store({
         .remove()
         .then(() => {
           commit('deleteList', payload.idList);
+          getters.listCards(payload.idList).forEach((card) => {
+            dispatch('deleteCard', { cardId: card.id });
+          });
         });
     },
-    loadUserLists({ commit, getters }) {
+    loadUserLists({ commit, getters, dispatch }) {
       const user = getters.user.uid;
       firebase
         .database()
@@ -201,6 +257,7 @@ const store = new Vuex.Store({
               idBoard: list[1].idBoard,
             }));
             commit('loadUserLists', userLists);
+            dispatch('loadUserCards');
           }
         })
         .catch((error) => {
@@ -229,6 +286,54 @@ const store = new Vuex.Store({
           commit('setError', error);
         });
     },
+
+    loadUserCards({ commit, getters }) {
+      const user = getters.user.uid;
+      firebase
+        .database()
+        .ref(`users/${user}`)
+        .child('/cards')
+        .once('value')
+        .then((data) => {
+          if (data.val() === null || data.val() === undefined) {
+            return;
+          }
+          const userCards = Object.entries(data.val()).map(card => ({
+            id: card[0],
+            ...card[1],
+          }));
+          commit('loadUserCards', userCards);
+        })
+        .catch((error) => {
+          commit('setError', error);
+        });
+    },
+    loadUserStarredRepos({ commit, getters }) {
+      if (getters.userStarredRepos.length > 0) {
+        return;
+      }
+      const user = getters.user.providerData[0].uid;
+      axios.get(`https://api.github.com/user/${user}`).then(({ data }) => {
+        const username = data.login;
+        return axios
+          .get(`https://api.github.com/users/${username}/starred?per_page=100&type=owner`)
+          .then((response) => {
+            const userRepos = response.data.map(repo => ({
+              clone_url: repo.clone_url,
+              name: repo.name,
+              stargazers_count: repo.stargazers_count,
+              description: repo.description,
+              owner: {
+                avatar_url: repo.owner.avatar_url,
+                login: repo.owner.login,
+                url: repo.owner.url,
+              },
+            }));
+            commit('loadUserStarredRepos', userRepos);
+          });
+      });
+    },
+
     setUserLoadedBoard({ commit, dispatch, getters }, payload) {
       const selectedBoard = getters.getLoadedBoard(payload);
       commit('setUserLoadedBoard', selectedBoard);
@@ -262,8 +367,12 @@ const store = new Vuex.Store({
     userLists(state) {
       return state.userLists;
     },
+    userStarredRepos(state) {
+      return state.userStarredRepos;
+    },
 
     loadedBoardLists: state => boardId => state.userLists.filter(list => list.idBoard === boardId),
+    listCards: state => listId => state.userCards.filter(card => card.idList === listId),
   },
 });
 

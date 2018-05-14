@@ -1,16 +1,8 @@
 <template lang="pug">
 v-flex.mb-2(xs12)
     v-card
-        v-menu.ma-0.list__menu.card__edit-button.right( bottom offset-y)
-            v-btn(flat icon slot="activator")
-                v-icon edit
-            v-list
-                v-list-tile(@click="onDeleteCard(card.id)")
-                    v-icon.mr-1 edit
-                    | Edit                      
-                v-list-tile(@click="onDeleteCard(card.id)")
-                    v-icon.mr-1 delete
-                    | Delete
+        v-btn.ma-1.card__edit-button.right(icon)
+            v-icon edit
         v-toolbar(flat)
             v-container.ma-0
                 v-layout(row wrap)
@@ -31,16 +23,13 @@ v-flex.mb-2(xs12)
             p {{card.notes}}
         v-card-actions
             v-icon notes
+
+
 </template>
 <script>
 export default {
   // eslint-disable-next-line
-  props: ['card'],
-  methods: {
-    onDeleteCard(cardId) {
-      this.$store.dispatch('deleteCard', { cardId });
-    },
-  },
+  props: ['card']
 };
 </script>
 <style lang="scss" scoped>
