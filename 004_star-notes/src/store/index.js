@@ -262,9 +262,7 @@ const store = new Vuex.Store({
     userLists(state) {
       return state.userLists;
     },
-    // loadedBoardLists(state, getters) {
-    //   return state.userLists.filter(list => list.idBoard === getters.loadedBoard.id);
-    // },
+
     loadedBoardLists: state => boardId => state.userLists.filter(list => list.idBoard === boardId),
   },
 });
