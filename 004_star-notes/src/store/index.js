@@ -53,6 +53,9 @@ const store = new Vuex.Store({
     createNewBoard(state, payload) {
       state.userBoards.push(payload);
     },
+    deleteBoard(state, payload) {
+      state.userBoards = state.userBoards.filter(board => board.id !== payload);
+    },
     loadUserBoards(state, payload) {
       state.userBoards = payload;
     },
@@ -164,6 +167,21 @@ const store = new Vuex.Store({
         .catch((error) => {
           commit('setError', error);
           commit('setLoading', false);
+        });
+    },
+    deleteBoard({ commit, getters, dispatch }, payload) {
+      const user = getters.user.uid;
+      firebase
+        .database()
+        .ref(`users/${user}`)
+        .child(`/boards/${payload.idBoard}`)
+        .remove()
+        .then(() => {
+          commit('deleteBoard', payload.idBoard);
+          getters.loadedBoardLists(payload.idBoard).forEach((list) => {
+            dispatch('deleteList', { idList: list.id });
+          });
+          commit('setUserLoadedBoard', null);
         });
     },
     createNewList({ commit, getters }, payload) {

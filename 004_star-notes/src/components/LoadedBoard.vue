@@ -1,9 +1,21 @@
 <template lang="pug">
-v-container(v-if="loadedBoard !== null" )
+v-container(v-if="loadedBoard === null")
+  v-layout(row wrap)
+    v-flex(xs12)
+      h3 This board does not exist.
+v-container(v-else)
     v-layout(row wrap)
-        v-flex(xs12)
+        v-flex(xs6)
             h2 {{loadedBoard.name}}
-            //- v-text-field(v-else v-model="newBoardName")
+            //- v-text-field(v-else v-model="newBoardName")    
+        v-flex(xs6)
+          v-menu.ma-0.board__menu.right(bottom offset-y)
+            v-btn.ma-0(flat slot="activator")
+              v-icon more_horiz
+            v-list
+              v-list-tile(@click="onDeleteBoard")
+                v-icon delete
+                | Delete Board          
     v-layout.board__lists(row)
         v-flex.ma-3(v-for="list in loadedBoardLists" :key="list.id")
             v-card.mr-2(light color="grey lighten-3" width="400")
@@ -120,8 +132,16 @@ export default {
       this.newCardNotes = '';
       this.selectedRepo = null;
     },
+    onDeleteBoard() {
+      this.$store.dispatch('deleteBoard', {
+        idBoard: this.$route.params.boardId,
+      });
+    },
   },
   computed: {
+    loading() {
+      return this.$store.getters.loading;
+    },
     loadedBoard() {
       return this.$store.getters.loadedBoard;
     },
