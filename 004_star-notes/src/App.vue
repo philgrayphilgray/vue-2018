@@ -21,7 +21,7 @@
                     v-icon exit_to_app
     v-toolbar
         v-toolbar-side-icon(@click.native.stop="sideNav = !sideNav" v-if="userIsAuthenticated")
-        v-toolbar-title StarNotes
+        router-link.header__branding(to="/" tag="v-toolbar-title") StarNotes
         v-spacer
         v-toolbar-items
             v-menu(bottom offset-y)
@@ -75,3 +75,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.header__branding {
+  cursor: pointer;
+}
+</style>

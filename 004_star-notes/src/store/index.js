@@ -47,6 +47,9 @@ const store = new Vuex.Store({
     createNewList(state, payload) {
       state.userLists.push(payload);
     },
+    deleteList(state, payload) {
+      state.userLists = state.userLists.filter(list => list.id !== payload);
+    },
     createNewBoard(state, payload) {
       state.userBoards.push(payload);
     },
@@ -56,7 +59,7 @@ const store = new Vuex.Store({
     setUserLoadedBoard(state, payload) {
       state.userLoadedBoard = payload;
     },
-    loadUserlists(state, payload) {
+    loadUserLists(state, payload) {
       state.userLists = payload;
     },
     setUser(state, payload) {
@@ -172,7 +175,17 @@ const store = new Vuex.Store({
           commit('setLoading', false);
         });
     },
-
+    deleteList({ commit, getters }, payload) {
+      const user = getters.user.uid;
+      firebase
+        .database()
+        .ref(`users/${user}`)
+        .child(`/lists/${payload.idList}`)
+        .remove()
+        .then(() => {
+          commit('deleteList', payload.idList);
+        });
+    },
     loadUserLists({ commit, getters }) {
       const user = getters.user.uid;
       firebase
@@ -187,7 +200,7 @@ const store = new Vuex.Store({
               name: list[1].name,
               idBoard: list[1].idBoard,
             }));
-            commit('loadUserlists', userLists);
+            commit('loadUserLists', userLists);
           }
         })
         .catch((error) => {

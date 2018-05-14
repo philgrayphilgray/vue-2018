@@ -10,8 +10,13 @@ v-container(v-if="loadedBoard !== null")
                 v-toolbar.primary(flat dark)
                     v-toolbar-title {{list.name}}
                     v-spacer
-                    v-btn(flat)
+                    v-menu.ma-0(bottom offset-y)
+                      v-btn.ma-0(flat slot="activator")
                         v-icon more_horiz
+                      v-list
+                        v-btn(@click="onDeleteList(list.id)")
+                          v-icon delete
+                          | Delete
                 v-container
                     v-layout(row wrap)
                         //- Card
@@ -65,6 +70,9 @@ export default {
         idBoard: this.loadedBoard.id,
       });
       this.newListName = '';
+    },
+    onDeleteList(idList) {
+      this.$store.dispatch('deleteList', { idList });
     },
     onCancelDialog() {
       this.dialog = false;
