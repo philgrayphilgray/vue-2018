@@ -2,9 +2,19 @@
 
 > A Vue.js project
 
+* Note: Include your Firebase variables in `.sample.env` and rename it to `.env`
+
+```md
+FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
+FIREBASE_AUTH_DOMAIN=YOUR_FIREBASE_AUTH_DOMAIN
+FIREBASE_DB_URL=YOUR_FIREBASE_DB_URL
+FIREBASE_PROJECT_ID=YOUR_FIREBASE_PROJECT_ID
+FIREBASE_STORAGE_BUCKET=YOUR_FIREBASE_STORAGE_BUCKET
+```
+
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
